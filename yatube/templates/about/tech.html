@@ -1,0 +1,34 @@
+<!-- templates/about/tech.html -->
+{% extends "base.html" %}
+{% block title %}Технологии{% endblock %}
+{% block content %}
+<div class="row">
+  <h4>Вот что я умею</h4>
+  {% comment %}
+    Боковой блок со списком технологий 
+    Займет всю ширину блока на мобильном
+    и 25% при размерах экрана ≥768px
+  {% endcomment %}
+  <aside class="col-12 col-md-3">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        Python
+      </li>
+      <li class="list-group-item">
+        Django
+      </li>
+    </ul>
+  </aside>
+  {% comment %}
+    Статья  
+    Займет всю ширину блока на мобильном
+    и 75% при размерах экрана ≥768px
+  {% endcomment %}
+  <article class="col-12 col-md-9">
+    <p>Технологии</p>
+    <p> В ходе данного проекта ,я научилась создавать сайт при помощи django.
+      Создавать форму регистрации с помощью UserCreationForm . Узнала что такое paginator и 'с чем его едят'.
+      И еще много всего интересного!
+  </article>
+</div>
+{% endblock %}
