@@ -13,40 +13,34 @@
             <div class="card">
               <div class="card-header">
               {% if is_edit %}
-              Редактировать
+                Редактировать
               {% else %}
-              Новый пост 
+                Новый пост 
               {% endif %}            
               </div>
               <div class="card-body">        
                 {% if is_edit %}
-                <form method="POST" action="{% url 'posts:post_edit' post.id %}">{% csrf_token %}
+                  <form method="POST" action="{% url 'posts:post_edit' post.id %}">{% csrf_token %}
                 {% else %}
-                <form method="POST" action="{% url 'posts:post_create' %}">{% csrf_token %}
-                {% endif %}          
+                  <form method="POST" action="{% url 'posts:post_create' %}">{% csrf_token %}
+                {% endif %}
+                {% load user_filters %}
+                {% for field in form %}
                   <div class="form-group row my-3 p-3">
-                    <label for="id_text">
-                      Текст поста                  
-                      <span class="required text-danger" >*</span>                  
-                    </label>
-                    <textarea name="text" cols="40" rows="10" class="form-control" required id="id_text">
-                    </textarea>                
-                    <small id="id_text-help" class="form-text text-muted">
-                      Текст нового поста
-                    </small>                  
-                  </div>            
-                  <div class="form-group row my-3 p-3">
-                    <label for="id_group">
-                      Группа                  
-                    </label>
-                    <select name="group" class="form-control" id="id_group">
-                      <option value="" selected>---------</option>
-                      <option value="1">Группа: Лев Толстой – зеркало русской революции</option>
-                    </select>
-                    <small id="id_group-help" class="form-text text-muted">
-                      Группа, к которой будет относиться пост
-                    </small>
-                  </div>
+                     <label for="{{ field.id_for_label }}">
+                        {{ field.label }}
+                        {% if field.field.required %}
+                        <span class="required text-danger" >*</span>
+                        {% endif %}
+                      </label>
+                      {{ field|addclass:'form-control' }}
+                      {% if field.help_text %}
+                      <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
+                        {{ field.help_text|safe }}
+                      </small>
+                     {% endif %}
+                   </div>
+                {% endfor %}
                   <div class="d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary">
                       {% if is_edit %}

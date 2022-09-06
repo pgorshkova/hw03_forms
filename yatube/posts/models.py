@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
+LINE_NUMBER = 15
+
 User = get_user_model()
 
 
 class Post(models.Model):
-    text = models.TextField()
+    text = models.TextField(verbose_name="Группа")
     pub_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
         User,
@@ -17,11 +19,15 @@ class Post(models.Model):
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        related_name='posts'
+        related_name='posts',
+        verbose_name="Группа"
     )
 
+    class Meta:
+        ordering = ['-pub_date']
+
     def __str__(self):
-        return self.text
+        return self.text[:LINE_NUMBER]
 
 
 class Group(models.Model):
