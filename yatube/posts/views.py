@@ -1,15 +1,16 @@
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render
-from .forms import PostForm
 from django.shortcuts import redirect
 
+
+from .forms import PostForm
 from .models import Group, Post, User
 
 POST_NUMBER = 10
 
 
 def index(request):
-    post_list = Post.objects.all().order_by('-pub_date')
+    post_list = Post.objects.all()
     paginator = Paginator(post_list, POST_NUMBER)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -80,17 +81,15 @@ def post_edit(request, post_id):
     if request.user != author:
         return redirect('posts:post_detail', post_id)
     elif request.user == author:
-        if request.method == 'POST':
-            form = PostForm(request.POST, instance=post)
-            if form.is_valid():
-                post.save()
-                return redirect('posts:post_detail', post_id)
-            context = {'form': form, 'post': post}
-            return render(request, 'posts/create_post.html', context)
-        form = PostForm(instance=post)
-        context = {
-            'form': form,
-            'post': post,
-            'is_edit': True
-        }
+        form = PostForm(request.POST or None, instance=post)
+        if form.is_valid():
+            post.save()
+            return redirect('posts:post_detail', post_id)
+        context = {'form': form, 'post': post}
+        return render(request, 'posts/create_post.html', context)
+    context = {
+        'form': form,
+        'post': post,
+        'is_edit': True
+    }
     return render(request, 'posts/create_post.html', context)
